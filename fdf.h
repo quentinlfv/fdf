@@ -17,6 +17,10 @@ typedef	struct s_map
 {
 	char	***map;
 	int		count_y;
+	int		count_x;
+	int		**mapint;
+	int		int_min;
+	int		int_max;
 }t_map;
 
 typedef struct	s_data
@@ -42,6 +46,8 @@ void    my_mlx_pixel_put(t_data *data, int x, int y, int color);
 t_map	get_maps(char *map_file);
 t_map	initialize_maps(char *s_map, int y);
 int		put_pixel(t_data *data);
+int 	atoi_map(t_data *data);
+int		map_limit(t_data *data);
 
 /* get_next_line */
 
@@ -62,5 +68,6 @@ char	**ft_split(char const *s, char c);
 char	*ft_strjoin(char const *s1, char const *s2);
 int 	open_doc(char *doc);
 int		close_doc(int fd);
+int	ft_atoi(const char *nptr);
 
 #endif

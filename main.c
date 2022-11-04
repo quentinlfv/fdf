@@ -41,7 +41,9 @@ int	main(int ac, char **av)
 	data.img = mlx_new_image(data.mlx_ptr, 1920, 1080);
 	data.addr = mlx_get_data_addr(data.img, &data.bits_per_pixel, &data.line_length, &data.endian);
 	data.map = get_maps(av[1]);
+	atoi_map(&data);
 	put_pixel(&data);
+
 	mlx_loop_hook(data.mlx_ptr, &handle_no_event, &data);
 	mlx_hook(data.win_ptr, KeyPress, KeyPressMask, &handle_keypress, &data);
 
@@ -68,7 +70,6 @@ t_map	get_maps(char *map_file)
 		map = ft_strjoin(map, line);
 		count_y++;
 	}
-	printf("y = %d\n%s\n", count_y, map);
 	close_doc(fd);
 	free(line);
 	return (initialize_maps(map, count_y));
@@ -91,7 +92,7 @@ t_map	initialize_maps(char *s_map, int y)
 	}
 	free(s_map);
 	free(demi_map);
-	printf("\n%c\n", map.map[2][2][1]);
+	//printf("\n%c\n", map.map[2][2][1]);
 	return (map);
 }
 
@@ -101,17 +102,95 @@ int	put_pixel(t_data *data)
 	int x;
 
 	y = 0;
-	while (data->map.map[y])
+	printf("\n\n");
+	while (y < data->map.count_y)
 	{
 		x = 0;
 		while (data->map.map[y][x])
 		{
-			my_mlx_pixel_put(data, x * 5, y * 5, 0x00FF0000);
+			printf("%s ", data->map.map[y][x]);
+			my_mlx_pixel_put(data, ((x - y) * 10) + 1920 / 2, (((x + y) / 2) * 10) + 1080 / 2, 0x00FF0000);
+			x++;
+		}
+		printf("\n");
+		y++;
+	}
+	data->map.count_x = x;
+	mlx_put_image_to_window(data->mlx_ptr, data->win_ptr, data->img, 0, 0);
+	return (0);
+}
+
+int atoi_map(t_data *data)
+{
+	int	**int_map;
+	int	y;
+	int	x;
+
+	y = 0;
+	int_map = malloc(sizeof(int *) * data->map.count_y);
+	if (!int_map)
+		return (0);
+	while (y < data->map.count_y)
+	{
+		int_map[y] = malloc(sizeof(int) * data->map.count_x);
+		if (!int_map)
+			return (0);
+		y++;
+	}
+	y = 0;
+	while (y < data->map.count_y)
+	{
+		x = 0;
+		while (x < data->map.count_x)
+		{
+			int_map[y][x] = ft_atoi(data->map.map[y][x]);
 			x++;
 		}
 		y++;
-		//printf("ligne %d : x = %d\n", y, x);
 	}
-	mlx_put_image_to_window(data->mlx_ptr, data->win_ptr, data->img, 0, 0);
+	printf("\n\n\n");
+	y = 0;
+	while (y < data->map.count_y)
+	{
+		x = 0;
+		while (x < data->map.count_x)
+		{
+			printf("%d ", int_map[y][x]);
+			x++;
+		}
+		printf("\n");
+		y++;
+	}
+	data->map.mapint = int_map;
+	map_limit(data);
+	return (1);
+}
+
+int	map_limit(t_data *data)
+{
+	int	min;
+	int	max;
+	int	y;
+	int	x;
+
+	y = 0;
+	min = data->map.mapint[y][0];
+	max = data->map.mapint[y][0];
+	while (y < data->map.count_y)
+	{
+		x = 0;
+		while (x < data->map.count_x)
+		{
+			if (data->map.mapint[y][x] > max)
+				max = data->map.mapint[y][x];
+			if (data->map.mapint[y][x] < min)
+				min = data->map.mapint[y][x];
+			x++;
+		}
+		y++;
+	}
+	data->map.int_max = max;
+	data->map.int_min = min;
+	printf("max = %d || min = %d\n", max, min);
 	return (0);
 }
