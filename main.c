@@ -24,6 +24,12 @@ void    my_mlx_pixel_put(t_data *data, int x, int y, int color)
         *(unsigned int*)dst = color;
 }
 
+int samibg(t_data *data)
+{
+	mlx_loop_end(data->mlx_ptr);
+	return (0);
+}
+
 int	main(int ac, char **av)
 {
 	t_data	data;
@@ -46,7 +52,7 @@ int	main(int ac, char **av)
 
 	mlx_loop_hook(data.mlx_ptr, &handle_no_event, &data);
 	mlx_hook(data.win_ptr, KeyPress, KeyPressMask, &handle_keypress, &data);
-
+	mlx_hook(data.win_ptr, 17, 0, &samibg, &data);
 	mlx_loop(data.mlx_ptr);
 
 	mlx_destroy_display(data.mlx_ptr);
@@ -106,7 +112,7 @@ int	put_pixel(t_data *data)
 	while (y < data->map.count_y)
 	{
 		x = 0;
-		while (data->map.map[y][x])
+		while (x < data->map.count_x)
 		{
 			printf("%s ", data->map.map[y][x]);
 			my_mlx_pixel_put(data, ((x - y) * 10) + 1920 / 2, (((x + y) / 2) * 10) + 1080 / 2, 0x00FF0000);
@@ -115,8 +121,6 @@ int	put_pixel(t_data *data)
 		printf("\n");
 		y++;
 	}
-	data->map.count_x = x;
-	mlx_put_image_to_window(data->mlx_ptr, data->win_ptr, data->img, 0, 0);
 	return (0);
 }
 
@@ -127,6 +131,7 @@ int atoi_map(t_data *data)
 	int	x;
 
 	y = 0;
+	count_x(data);
 	int_map = malloc(sizeof(int *) * data->map.count_y);
 	if (!int_map)
 		return (0);
@@ -166,6 +171,25 @@ int atoi_map(t_data *data)
 	return (1);
 }
 
+void	count_x(t_data *data)
+{
+	int	y;
+	int x;
+
+	y = 0;
+	while (y < data->map.count_y)
+	{
+		x = 0;
+		while (data->map.map[y][x])
+		{
+			x++;
+		}
+		y++;
+	}
+	data->map.count_x = x;
+	printf("\n count x = %d\n", data->map.count_x);
+}
+
 int	map_limit(t_data *data)
 {
 	int	min;
@@ -176,13 +200,17 @@ int	map_limit(t_data *data)
 	y = 0;
 	min = data->map.mapint[y][0];
 	max = data->map.mapint[y][0];
+	printf("\n count x = %d\n", data->map.count_x);
 	while (y < data->map.count_y)
 	{
 		x = 0;
 		while (x < data->map.count_x)
 		{
 			if (data->map.mapint[y][x] > max)
+			{
 				max = data->map.mapint[y][x];
+				printf("max = %d\n", data->map.mapint[y][x]);
+			}
 			if (data->map.mapint[y][x] < min)
 				min = data->map.mapint[y][x];
 			x++;

@@ -48,6 +48,9 @@ t_map	initialize_maps(char *s_map, int y);
 int		put_pixel(t_data *data);
 int 	atoi_map(t_data *data);
 int		map_limit(t_data *data);
+void	count_x(t_data *data);
+int 	samibg(t_data *data);
+
 
 /* get_next_line */
 
