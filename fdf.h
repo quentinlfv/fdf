@@ -10,8 +10,19 @@
 # include <sys/stat.h>
 # include <fcntl.h>
 # include <stdio.h>
+# include <math.h>
 
 # define BUFFER_SIZE 750
+
+
+typedef struct s_line
+{
+	int	dx;
+	int	dy;
+	int	step;
+	float	xinc;
+	float	yinc;
+}t_line;
 
 typedef	struct s_map
 {
@@ -33,6 +44,7 @@ typedef struct	s_data
 	int		line_length;
 	int		endian;
 	t_map 	map;
+	t_line	line;
 }t_data;
 
 
@@ -50,6 +62,8 @@ int 	atoi_map(t_data *data);
 int		map_limit(t_data *data);
 void	count_x(t_data *data);
 int 	samibg(t_data *data);
+void	dda_alg(t_data *data, float x1, float y1, int x2, int y2);
+
 
 
 /* get_next_line */

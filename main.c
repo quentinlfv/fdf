@@ -108,19 +108,34 @@ int	put_pixel(t_data *data)
 	int x;
 
 	y = 0;
-	printf("\n\n");
+	//printf("\n\n");
 	while (y < data->map.count_y)
 	{
 		x = 0;
-		while (x < data->map.count_x)
+		while (x + 1< data->map.count_x)
 		{
-			printf("%s ", data->map.map[y][x]);
-			my_mlx_pixel_put(data, ((x - y) * 10) + 1920 / 2, (((x + y) / 2) * 10) + 1080 / 2, 0x00FF0000);
-			x++;
+			printf("x = %d\n", x);
+			//dda_alg(data, ((float)x * 10) + 1920 / 2, ((float)y * 10) + 1080 / 2, (x++ * 10) + 1920 / 2, (y * 10) + 1080 / 2);
+			dda_alg(data, ((x - y) * 10) + 1920 / 2, (((x + y) / 2) * 10) + 1080 / 2, ((x++ - y) * 10) + 1920 / 2, (((x + y) / 2) * 10) + 1080 / 2);
+			//my_mlx_pixel_put(data, ((x - y) * 10) + 1920 / 2, (((x + y) / 2) * 10) + 1080 / 2, 0x00FF0000);
+			printf("x = %d\n", x);
+			//x++;
 		}
-		printf("\n");
+		//printf("\n");
 		y++;
 	}
+	x = 0;
+	while (x < data->map.count_x)
+	{
+		y = 0;
+		while (y + 1 < data->map.count_y)
+		{
+			dda_alg(data, ((x - y) * 10) + 1920 / 2, (((x + y) / 2) * 10) + 1080 / 2, ((x - y) * 10) + 1920 / 2, (((x + y++) / 2) * 10) + 1080 / 2);
+			//dda_alg(data, (x * 10) + 1920 / 2, (y * 10) + 1080 / 2, (x * 10) + 1920 / 2, (y++ * 10) + 1080 / 2);
+		}
+		x++;
+	}
+	mlx_put_image_to_window(data->mlx_ptr, data->win_ptr, data->img, 0, 0);
 	return (0);
 }
 
@@ -221,4 +236,27 @@ int	map_limit(t_data *data)
 	data->map.int_min = min;
 	printf("max = %d || min = %d\n", max, min);
 	return (0);
+}
+
+void	dda_alg(t_data *data, float x1, float y1, int x2, int y2)
+{
+	int	i;
+
+	data->line.dx = x2 - x1;
+	data->line.dy = y2 - y1;
+	if (abs(data->line.dx) > abs(data->line.dy))
+		data->line.step = abs(data->line.dx);
+	else
+		data->line.step = abs(data->line.dy);
+	data->line.xinc = data->line.dx / data->line.step;
+	data->line.yinc = data->line.dy / data->line.step;
+	i = 0;
+	while (i < data->line.step)
+	{	
+		printf("x1 = %f | y1 = %f | step = %d | x2 = %d | y2 = %d\n", x1, y1, data->line.step, x2, y2);
+		my_mlx_pixel_put(data, (int)roundf(x1), (int)roundf(y1), 0x00FF0000);
+		x1 = x1 + data->line.xinc;
+		y1 = y1 + data->line.yinc;
+		i++;
+	}
 }
