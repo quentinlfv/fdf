@@ -13,13 +13,16 @@
 # include <math.h>
 
 # define BUFFER_SIZE 750
+# define SPACE 20
+# define WIN_HEIGTH 1080
+# define WIN_WIDTH 1920
 
 
 typedef struct s_line
 {
-	int	dx;
-	int	dy;
-	int	step;
+	float	dx;
+	float	dy;
+	float	step;
 	float	xinc;
 	float	yinc;
 }t_line;
@@ -27,6 +30,7 @@ typedef struct s_line
 typedef	struct s_map
 {
 	char	***map;
+	int		reset;
 	int		count_y;
 	int		count_x;
 	int		**mapint;
@@ -58,11 +62,12 @@ void    my_mlx_pixel_put(t_data *data, int x, int y, int color);
 t_map	get_maps(char *map_file);
 t_map	initialize_maps(char *s_map, int y);
 int		put_pixel(t_data *data);
+int put_pix(t_data *data);
 int 	atoi_map(t_data *data);
 int		map_limit(t_data *data);
 void	count_x(t_data *data);
 int 	samibg(t_data *data);
-void	dda_alg(t_data *data, float x1, float y1, int x2, int y2);
+void	dda_alg(t_data *data, float x1, float y1, float x2, float y2);
 
 
 

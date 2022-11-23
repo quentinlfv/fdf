@@ -48,7 +48,7 @@ int	main(int ac, char **av)
 	data.addr = mlx_get_data_addr(data.img, &data.bits_per_pixel, &data.line_length, &data.endian);
 	data.map = get_maps(av[1]);
 	atoi_map(&data);
-	put_pixel(&data);
+	put_pix(&data);
 
 	mlx_loop_hook(data.mlx_ptr, &handle_no_event, &data);
 	mlx_hook(data.win_ptr, KeyPress, KeyPressMask, &handle_keypress, &data);
@@ -58,6 +58,7 @@ int	main(int ac, char **av)
 	mlx_destroy_display(data.mlx_ptr);
 	free(data.mlx_ptr);
 	free(data.map.map);
+	free(data.map.mapint);
 	return (0);
 }
 
@@ -71,13 +72,17 @@ t_map	get_maps(char *map_file)
 	count_y = 0;
 	map = NULL;
 	fd = open_doc(map_file);
-	while (line = get_next_line(fd))
+	line = get_next_line(fd);
+	map = ft_strjoin(map, line);
+	while (line != NULL)
 	{
+		free(line);
+		line = get_next_line(fd);
 		map = ft_strjoin(map, line);
 		count_y++;
 	}
-	close_doc(fd);
 	free(line);
+	close_doc(fd);
 	return (initialize_maps(map, count_y));
 }
 
@@ -98,7 +103,6 @@ t_map	initialize_maps(char *s_map, int y)
 	}
 	free(s_map);
 	free(demi_map);
-	//printf("\n%c\n", map.map[2][2][1]);
 	return (map);
 }
 
@@ -112,14 +116,14 @@ int	put_pixel(t_data *data)
 	while (y < data->map.count_y)
 	{
 		x = 0;
-		while (x + 1< data->map.count_x)
+		while (x < data->map.count_x)
 		{
 			printf("x = %d\n", x);
 			//dda_alg(data, ((float)x * 10) + 1920 / 2, ((float)y * 10) + 1080 / 2, (x++ * 10) + 1920 / 2, (y * 10) + 1080 / 2);
-			dda_alg(data, ((x - y) * 10) + 1920 / 2, (((x + y) / 2) * 10) + 1080 / 2, ((x++ - y) * 10) + 1920 / 2, (((x + y) / 2) * 10) + 1080 / 2);
-			//my_mlx_pixel_put(data, ((x - y) * 10) + 1920 / 2, (((x + y) / 2) * 10) + 1080 / 2, 0x00FF0000);
+			//dda_alg(data, ((x - y) * 10) + 1920 / 2, (((x + y) / 2) * 10) + 1080 / 2, ((x + 1 - y) * 10) + 1920 / 2, (((x + 1 + y) / 2) * 10) + 1080 / 2);
+			my_mlx_pixel_put(data, ( x + (x - y) * 10) + 1920 / 2, (y + ((x + y) / 2) * 10) + 1080 / 2, 0x00FF0000);
 			printf("x = %d\n", x);
-			//x++;
+			x++;
 		}
 		//printf("\n");
 		y++;
@@ -128,12 +132,60 @@ int	put_pixel(t_data *data)
 	while (x < data->map.count_x)
 	{
 		y = 0;
-		while (y + 1 < data->map.count_y)
+		while (y < data->map.count_y)
 		{
-			dda_alg(data, ((x - y) * 10) + 1920 / 2, (((x + y) / 2) * 10) + 1080 / 2, ((x - y) * 10) + 1920 / 2, (((x + y++) / 2) * 10) + 1080 / 2);
+			//dda_alg(data, ((x - y) * 10) + 1920 / 2, (((x + y) / 2) * 10) + 1080 / 2, ((x - y) * 10) + 1920 / 2, (((x + y++) / 2) * 10) + 1080 / 2);
 			//dda_alg(data, (x * 10) + 1920 / 2, (y * 10) + 1080 / 2, (x * 10) + 1920 / 2, (y++ * 10) + 1080 / 2);
+			y++;
 		}
 		x++;
+	}
+	mlx_put_image_to_window(data->mlx_ptr, data->win_ptr, data->img, 0, 0);
+	return (0);
+}
+
+int put_pix(t_data *data)
+{
+	int	x;
+	int	y;
+	int	i;
+	int	j;
+
+	i = 0;
+	data->map.reset = 0;
+	while (i < data->map.count_y)
+	{
+		y = WIN_HEIGTH / 4 + data->map.reset * SPACE;
+		x = WIN_WIDTH / 3 - data->map.reset * SPACE;
+		j = 0;
+		while (j + 1 < data->map.count_x)
+		{
+			dda_alg(data, x, y - (data->map.mapint[i][j] * SPACE / 8), x + SPACE, (y + SPACE / 2) - (data->map.mapint[i][j + 1] * SPACE / 8));
+			//my_mlx_pixel_put(data, x, y, 0x00FF0000);
+			x += SPACE;
+			y += SPACE / 2;
+			j++;
+		}
+		i++;
+		data->map.reset += 1;
+	}
+	i = 0;
+	data->map.reset = 0;
+	while (i < data->map.count_x)
+	{
+		y = WIN_HEIGTH / 4 + data->map.reset * (SPACE / 2);
+		x = WIN_WIDTH / 3 + data->map.reset * SPACE;
+		j = 0;
+		while (j + 1< data->map.count_y)
+		{
+			dda_alg(data, x, y - (data->map.mapint[j][i] * SPACE / 8), x - SPACE, (y + SPACE) - (data->map.mapint[j + 1][i] * SPACE / 8));
+			//my_mlx_pixel_put(data, x, y, 0x00FF0000);
+			x -= SPACE;
+			y += SPACE;
+			j++;
+		}
+		i++;
+		data->map.reset += 1;
 	}
 	mlx_put_image_to_window(data->mlx_ptr, data->win_ptr, data->img, 0, 0);
 	return (0);
@@ -238,7 +290,7 @@ int	map_limit(t_data *data)
 	return (0);
 }
 
-void	dda_alg(t_data *data, float x1, float y1, int x2, int y2)
+void	dda_alg(t_data *data, float x1, float y1, float x2, float y2)
 {
 	int	i;
 
@@ -253,8 +305,8 @@ void	dda_alg(t_data *data, float x1, float y1, int x2, int y2)
 	i = 0;
 	while (i < data->line.step)
 	{	
-		printf("x1 = %f | y1 = %f | step = %d | x2 = %d | y2 = %d\n", x1, y1, data->line.step, x2, y2);
-		my_mlx_pixel_put(data, (int)roundf(x1), (int)roundf(y1), 0x00FF0000);
+		//printf("x1 = %f | y1 = %f | step = %d | x2 = %f | y2 = %f | dy = %f | yinc = %f\n", x1, y1, data->line.step, x2, y2, data->line.dy, data->line.yinc);
+		my_mlx_pixel_put(data, round(x1), roundf(y1), 0x00FF0000);
 		x1 = x1 + data->line.xinc;
 		y1 = y1 + data->line.yinc;
 		i++;
