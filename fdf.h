@@ -13,7 +13,7 @@
 # include <math.h>
 
 # define BUFFER_SIZE 750
-# define SPACE 20
+# define SPACE 10
 # define WIN_HEIGTH 1080
 # define WIN_WIDTH 1920
 
@@ -68,6 +68,8 @@ int		map_limit(t_data *data);
 void	count_x(t_data *data);
 int 	samibg(t_data *data);
 void	dda_alg(t_data *data, float x1, float y1, float x2, float y2);
+void	free_all(t_data *data);
+
 
 
 
