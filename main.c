@@ -13,6 +13,8 @@ int	handle_keypress(int key, t_data *data)
 {
 	if (key == XK_Escape)
 		mlx_destroy_window(data->mlx_ptr, data->win_ptr);
+	if (data->img)
+		mlx_destroy_image(data->mlx_ptr, data->img);
 	return (0);
 }
 
@@ -29,8 +31,12 @@ void    my_mlx_pixel_put(t_data *data, int x, int y, int color)
 int samibg(t_data *data)
 {
 	mlx_loop_end(data->mlx_ptr);
-	mlx_destroy_window(data->mlx_ptr, data->win_ptr);
-	mlx_destroy_display(data->mlx_ptr);
+	if (data->win_ptr)
+		mlx_destroy_window(data->mlx_ptr, data->win_ptr);
+	if (data->img)
+		mlx_destroy_image(data->mlx_ptr, data->img);
+	if (data->mlx_ptr)
+		mlx_destroy_display(data->mlx_ptr);
 	free_all(data);
 	exit(0);
 	return (0);
@@ -41,15 +47,7 @@ int	main(int ac, char **av)
 	t_data	data;
 
 	data.mlx_ptr = mlx_init();
-	//if (mlx_ptr == NULL)
-	//	return (0);
 	data.win_ptr = mlx_new_window(data.mlx_ptr, 1920, 1080, "42");
-	//if (win_ptr == NULL)
-	//{
-	//	free(mlx_ptr);
-	//	return(0);
-	//}
-
 	data.img = mlx_new_image(data.mlx_ptr, 1920, 1080);
 	data.addr = mlx_get_data_addr(data.img, &data.bits_per_pixel, &data.line_length, &data.endian);
 	data.map = get_maps(av[1]);
@@ -83,7 +81,6 @@ void	free_all(t_data *data)
 		i++;
 	}
 	i = 0;
-	free(data->img);
 	free(data->map.map);
 	free(data->map.mapint);
 	free(data->mlx_ptr);
@@ -137,44 +134,6 @@ t_map	initialize_maps(char *s_map, int y)
 	return (map);
 }
 
-int	put_pixel(t_data *data)
-{
-	int	y;
-	int x;
-
-	y = 0;
-	//printf("\n\n");
-	while (y < data->map.count_y)
-	{
-		x = 0;
-		while (x < data->map.count_x)
-		{
-			printf("x = %d\n", x);
-			//dda_alg(data, ((float)x * 10) + 1920 / 2, ((float)y * 10) + 1080 / 2, (x++ * 10) + 1920 / 2, (y * 10) + 1080 / 2);
-			//dda_alg(data, ((x - y) * 10) + 1920 / 2, (((x + y) / 2) * 10) + 1080 / 2, ((x + 1 - y) * 10) + 1920 / 2, (((x + 1 + y) / 2) * 10) + 1080 / 2);
-			my_mlx_pixel_put(data, ( x + (x - y) * 10) + 1920 / 2, (y + ((x + y) / 2) * 10) + 1080 / 2, 0x00FF0000);
-			printf("x = %d\n", x);
-			x++;
-		}
-		//printf("\n");
-		y++;
-	}
-	x = 0;
-	while (x < data->map.count_x)
-	{
-		y = 0;
-		while (y < data->map.count_y)
-		{
-			//dda_alg(data, ((x - y) * 10) + 1920 / 2, (((x + y) / 2) * 10) + 1080 / 2, ((x - y) * 10) + 1920 / 2, (((x + y++) / 2) * 10) + 1080 / 2);
-			//dda_alg(data, (x * 10) + 1920 / 2, (y * 10) + 1080 / 2, (x * 10) + 1920 / 2, (y++ * 10) + 1080 / 2);
-			y++;
-		}
-		x++;
-	}
-	mlx_put_image_to_window(data->mlx_ptr, data->win_ptr, data->img, 0, 0);
-	return (0);
-}
-
 int put_pix(t_data *data)
 {
 	int	x;
@@ -191,7 +150,7 @@ int put_pix(t_data *data)
 		j = 0;
 		while (j + 1 < data->map.count_x)
 		{
-			dda_alg(data, x, y - (data->map.mapint[i][j] * SPACE / 2), x + SPACE, (y + SPACE / 2) - (data->map.mapint[i][j + 1] * SPACE / 2));
+			dda_alg(data, x, y - (data->map.mapint[i][j] * SPACE / 8), x + SPACE, (y + SPACE / 2) - (data->map.mapint[i][j + 1] * SPACE / 8));
 			//my_mlx_pixel_put(data, x, y, 0x00FF0000);
 			x += SPACE;
 			y += SPACE / 2;
@@ -209,7 +168,7 @@ int put_pix(t_data *data)
 		j = 0;
 		while (j + 1< data->map.count_y)
 		{
-			dda_alg(data, x, y - (data->map.mapint[j][i] * SPACE / 2), x - SPACE, (y + SPACE) - (data->map.mapint[j + 1][i] * SPACE / 2));
+			dda_alg(data, x, y - (data->map.mapint[j][i] * SPACE / 8), x - SPACE, (y + SPACE) - (data->map.mapint[j + 1][i] * SPACE / 8));
 			//my_mlx_pixel_put(data, x, y, 0x00FF0000);
 			x -= SPACE;
 			y += SPACE;

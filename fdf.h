@@ -13,7 +13,7 @@
 # include <math.h>
 
 # define BUFFER_SIZE 750
-# define SPACE 10
+# define SPACE 30
 # define WIN_HEIGTH 1080
 # define WIN_WIDTH 1920
 
@@ -61,8 +61,7 @@ int		handle_keypress(int key, t_data *data);
 void    my_mlx_pixel_put(t_data *data, int x, int y, int color);
 t_map	get_maps(char *map_file);
 t_map	initialize_maps(char *s_map, int y);
-int		put_pixel(t_data *data);
-int put_pix(t_data *data);
+int 	put_pix(t_data *data);
 int 	atoi_map(t_data *data);
 int		map_limit(t_data *data);
 void	count_x(t_data *data);
