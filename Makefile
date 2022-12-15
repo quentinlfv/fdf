@@ -2,12 +2,20 @@ NAME = fdf
 
 CC		= gcc
 
-CFLAGS	= -Wall -Werror -Wextra
+CFLAGS	= -Wall -Werror -Wextra 
 
 
 
 SRCS		= main.c \
 				functions.c \
+				free.c \
+				handle_event.c \
+				line.c \
+				map.c \
+				map_utils.c \
+				pix.c \
+				utils.c \
+				check.c \
 				get_next_line.c \
 				get_next_line_utils.c \
 
@@ -18,10 +26,10 @@ RM 			:= rm -rf
 all: $(NAME) 
 
 $(NAME): $(OBJS)
-	$(CC) $(OBJS) -Lmlx_linux -lmlx_Linux -L/usr/lib -Imlx_linux -lXext -lX11 -lm -lz -o $(NAME)
+	$(CC) $(CFLAGS) $(OBJS) -Lmlx_linux -lmlx_Linux -L/usr/lib -Imlx_linux -lXext -lX11 -lm -lz -o $(NAME)
 
 %.o: %.c
-	$(CC) -I/usr/include -Imlx_linux -O3 -c $< -o $@
+	$(CC) -g3 -I/usr/include -Imlx_linux -O3 -c $< -o $@
 
 clean:
 

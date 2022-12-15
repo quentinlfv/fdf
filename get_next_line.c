@@ -12,80 +12,72 @@
 
 #include "fdf.h"
 
-int	ft_findchr(char *str, char c)
+char	*get_line(char *mem_line)
 {
-	int	i;
+	int		i;
+	char	*str;
 
 	i = 0;
+	if (!mem_line[i])
+		return (NULL);
+	while (mem_line[i] && mem_line[i] != '\n')
+		i++;
+	str = malloc(sizeof(char) * (i + 2));
 	if (!str)
-		return (0);
-	while (str[i])
+		return (NULL);
+	i = 0;
+	while (mem_line[i] && mem_line[i] != '\n')
 	{
-		if (str[i] == c)
-		{
-			return (i);
-		}
+		str[i] = mem_line[i];
 		i++;
 	}
-	return (0);
+	if (mem_line[i] == '\n')
+	{
+		str[i] = mem_line[i];
+		i++;
+	}
+	str[i] = '\0';
+	return (str);
 }
 
-char	*get_line(char *stash, char *buf, int size)
+void	get_rest(char *mem_line, char *buf)
 {
-	char	*line;
-	int		nl;
-	int		len_stash;
+	size_t	i;
 
-	len_stash = ft_strlen(stash);
-	nl = ft_findchr(stash, '\n');
-	if (size == 0 && len_stash == 0)
-		return (NULL);
-	if (nl != 0 || stash[0] == '\n')
-	{
-		line = malloc (sizeof(char) * nl + 2);
-		if (!line)
-			return (NULL);
-		ft_strlcpy(line, stash, nl + 2);
-		if (stash[nl + 1])
-			ft_strlcpy(buf, &stash[nl + 1], len_stash);
-	}
-	else
-	{
-		line = malloc (sizeof(char) * len_stash + 1);
-		if (!line)
-			return (NULL);
-		ft_strcpy(line, stash);
-	}
-	return (line);
-}		
+	i = 0;
+	while (mem_line[i] && mem_line[i] != '\n')
+	i++;
+	if (i < ft_strlen(mem_line))
+		ft_strlcpy(buf, mem_line + i + 1, ft_strlen(mem_line) - i + 1);
+	free(mem_line);
+}
 
 char	*get_next_line(int fd)
 {
-	static char	buf[BUFFER_SIZE + 1];
-	char		*stash;
-	char		*line;
-	int			size;
+	static char		buf[BUFFER_SIZE + 1];
+	char			*mem_line;
+	char			*line;
+	ssize_t			ret;
 
-	size = BUFFER_SIZE;
-	line = NULL;
-	stash = NULL;
-	stash = ft_strjoin_gnl(stash, buf, ft_strlen(stash));
-	if (BUFFER_SIZE <= 0)
+	ret = 1;
+	if (BUFFER_SIZE < 1 || fd < 0)
 		return (NULL);
-	while (size == BUFFER_SIZE && ft_findchr(stash, '\n') == 0)
+	mem_line = NULL;
+	mem_line = ft_strjoin_gnl(mem_line, buf);
+	while (!ft_strchr(mem_line, '\n') && ret != 0)
 	{
-		size = read(fd, buf, BUFFER_SIZE);
-		if (size == -1)
-			return (free(stash), (NULL));
-		buf[size] = 0;
-		stash = ft_strjoin_gnl(stash, buf, ft_strlen(stash));
+		ft_bzero(buf, BUFFER_SIZE + 1);
+		ret = read(fd, buf, BUFFER_SIZE);
+		if (ret < 0)
+			return free(mem_line), (NULL);
+		mem_line = ft_strjoin_gnl(mem_line, buf);
+		if (!mem_line)
+			return (NULL);
 	}
-	line = get_line(stash, buf, size);
-	if (line == NULL)
-		return (free(stash), (NULL));
-	free(stash);
+	line = get_line(mem_line);
+	get_rest(mem_line, buf);
 	return (line);
-}		
+}
 
 // int	main(void)
 // {

@@ -12,32 +12,18 @@
 
 #include "fdf.h"
 
-int	ft_strlen(const char *s)
+void	ft_bzero(void *s, size_t n)
 {
-	int	i;
+	size_t	i;
 
-	if (s == NULL)
-		return (0);
+	if (!s)
+		return ;
 	i = 0;
-	while (s[i])
-		i++;
-	return (i);
-}
-
-char	*ft_strcpy(char *dest, char *src)
-{
-	int	i;
-
-	i = 0;
-	if (!dest || !src)
-		return (NULL);
-	while (src[i])
+	while (i < n)
 	{
-		dest[i] = src[i];
+		((char *)s)[i] = '\0';
 		i++;
 	}
-	dest[i] = 0;
-	return (dest);
 }
 
 size_t	ft_strlcpy(char *dst, const char *src, size_t size)
@@ -60,44 +46,62 @@ size_t	ft_strlcpy(char *dst, const char *src, size_t size)
 	return (srclen);
 }
 
-void	ft_bzero(void *s, size_t n)
+size_t	ft_strlen(const char *s)
 {
-	int	i;
+	size_t	i;
 
-	if (!s)
-		return ;
 	i = 0;
-	while (i < (int)n)
-	{
-		((char *)s)[i] = '\0';
+	while (s[i])
 		i++;
-	}
+	return (i);
 }
 
-char	*ft_strjoin_gnl(char *s1, char *s2, int len_stash)
+char	*ft_strchr(char *s, int c)
 {
-	char	*str;
 	int		i;
-	int		j;
+	char	*pt;
 
-	str = malloc(sizeof(char) * (len_stash + ft_strlen(s2) + 1));
-	if (!s1)
+	i = 0;
+	if (!s)
+		return (NULL);
+	if (c > 256)
+		c %= 256;
+	while (s[i])
 	{
-		s1 = malloc (sizeof(char) * 1);
-		s1[0] = 0;
-	}
-	if (!str || !s1 || !s2)
-		return (free(s1), free(str), (NULL));
-	i = -1;
-	j = -1;
-	while (++i < len_stash)
-		str[i] = s1[i];
-	while (++j < ft_strlen(s2))
-	{
-		str[i] = s2[j];
+		if (s[i] == c)
+		{
+			pt = &s[i];
+			return (pt);
+		}
 		i++;
 	}
-	str[i] = 0;
-	ft_bzero(s2, ft_strlen(s2));
-	return (free(s1), (str));
+	if (s[i] == c)
+	{
+		pt = &s[i];
+		return (pt);
+	}
+	return (0);
+}
+
+char	*ft_strjoin_gnl(char *mem_line, char *buf)
+{
+	size_t	len1;
+	size_t	len2;
+	char	*str;
+
+	len1 = 0;
+	len2 = 0;
+	if (mem_line != NULL)
+		len1 = ft_strlen(mem_line);
+	if (buf != NULL)
+		len2 = ft_strlen(buf);
+	str = malloc(sizeof(char) * (len1 + len2 + 1));
+	if (str == NULL)
+		return (NULL);
+	if (mem_line != NULL)
+		ft_strlcpy(str, mem_line, len1 + 1);
+	ft_strlcpy(str + len1, buf, len2 + 1);
+	ft_bzero(buf, len2);
+	free(mem_line);
+	return (str);
 }

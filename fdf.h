@@ -1,7 +1,7 @@
 #ifndef FDF_H
 # define FDF_H
 
-# include "mlx.h"
+# include "mlx_linux/mlx.h"
 # include <unistd.h>
 # include <X11/keysym.h>
 # include <X11/X.h>
@@ -12,7 +12,7 @@
 # include <stdio.h>
 # include <math.h>
 
-# define BUFFER_SIZE 750
+# define BUFFER_SIZE 1500000
 # define SPACE 30
 # define WIN_HEIGTH 1080
 # define WIN_WIDTH 1920
@@ -29,7 +29,7 @@ typedef struct s_line
 
 typedef	struct s_map
 {
-	char	***map;
+	char	**map;
 	int		reset;
 	int		count_y;
 	int		count_x;
@@ -64,10 +64,11 @@ t_map	initialize_maps(char *s_map, int y);
 int 	put_pix(t_data *data);
 int 	atoi_map(t_data *data);
 int		map_limit(t_data *data);
-void	count_x(t_data *data);
+int	count_x(char *s_map);
 int 	samibg(t_data *data);
 void	dda_alg(t_data *data, float x1, float y1, float x2, float y2);
 void	free_all(t_data *data);
+int 	check_arg(char *file);
 
 
 
@@ -75,12 +76,12 @@ void	free_all(t_data *data);
 /* get_next_line */
 
 void	ft_bzero(void *s, size_t n);
-int		ft_strlen(const char *s);
-char	*ft_strcpy(char *dest, char *src);
+size_t		ft_strlen(const char *s);
+char	*ft_strchr(char *s, int c);
 size_t	ft_strlcpy(char *dst, char const *src, size_t size);
-int		ft_findchr(char *str, char c);
-char	*ft_strjoin_gnl(char *s1, char *s2, int len_stash);
-char	*get_line(char *stash, char *buf, int size);
+void	get_rest(char *mem_line, char *buf);
+char	*ft_strjoin_gnl(char *mem_line, char *buf);
+char	*get_line(char *mem_line);
 char	*get_next_line(int fd);
 
 /* functions.c */
@@ -92,5 +93,7 @@ char	*ft_strjoin(char const *s1, char const *s2);
 int 	open_doc(char *doc);
 int		close_doc(int fd);
 int	ft_atoi(const char *nptr);
+static int	strcmmp(const char *s1, const char *s2, int i);
+char	*ft_strnstr(const char *s1, const char *s2, size_t n);
 
 #endif
