@@ -29,7 +29,7 @@ typedef struct s_line
 
 typedef	struct s_map
 {
-	char	**map;
+	char	***map;
 	int		reset;
 	int		count_y;
 	int		count_x;
@@ -60,7 +60,7 @@ int		handle_no_event(void *data);
 int		handle_keypress(int key, t_data *data);
 void    my_mlx_pixel_put(t_data *data, int x, int y, int color);
 t_map	get_maps(char *map_file);
-t_map	initialize_maps(char *s_map, int y);
+t_map	initialize_maps(char *f_map, int y);
 int 	put_pix(t_data *data);
 int 	atoi_map(t_data *data);
 int		map_limit(t_data *data);
