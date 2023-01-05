@@ -26,9 +26,11 @@ int	count_x(char *s_map)
 
 	x = 0;
 	count = 0;
+	while (s_map[x] == ' ')
+		x++;
 	while (s_map[x] != '\n')
 	{
-		if (s_map[x] == ' ')
+		if (s_map[x] == ' ' && s_map[x + 1] != '\n')
 		{
 			while (s_map[x] == ' ')
 				x++;
@@ -49,7 +51,7 @@ int	map_limit(t_data *data)
 	y = 0;
 	min = data->map.mapint[y][0];
 	max = data->map.mapint[y][0];
-	printf("\n count x = %d\n", data->map.count_x);
+	printf("\n count x = %d | count y = %d\n", data->map.count_x, data->map.count_y);
 	while (y < data->map.count_y)
 	{
 		x = 0;

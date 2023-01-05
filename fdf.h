@@ -14,8 +14,8 @@
 
 # define BUFFER_SIZE 1500000
 # define SPACE 30
-# define WIN_HEIGTH 1080
-# define WIN_WIDTH 1920
+# define WIN_HEIGTH 1440
+# define WIN_WIDTH 2560
 
 
 typedef struct s_line
@@ -31,6 +31,7 @@ typedef	struct s_map
 {
 	char	***map;
 	int		reset;
+	int 	zoom;
 	int		count_y;
 	int		count_x;
 	int		**mapint;

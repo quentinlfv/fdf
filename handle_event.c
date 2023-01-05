@@ -7,10 +7,14 @@ int	handle_no_event(void *data)
 
 int	handle_keypress(int key, t_data *data)
 {
+	if (key == '-')
+		printf("yo\n");
 	if (key == XK_Escape)
+	{
 		mlx_destroy_window(data->mlx_ptr, data->win_ptr);
-	if (data->img)
-		mlx_destroy_image(data->mlx_ptr, data->img);
+		if (data->img)
+			mlx_destroy_image(data->mlx_ptr, data->img);
+	}
 	return (0);
 }
 

@@ -11,13 +11,12 @@ int put_pix(t_data *data)
 	data->map.reset = 0;
 	while (i < data->map.count_y)
 	{
-		y = WIN_HEIGTH / 4 + data->map.reset * SPACE;
-		x = WIN_WIDTH / 3 - data->map.reset * SPACE;
+		y = (WIN_HEIGTH - (data->map.count_y * SPACE)) / 2 + data->map.reset * SPACE;
+		x = (WIN_WIDTH - (data->map.count_x * SPACE)) / 2 - data->map.reset * SPACE;
 		j = 0;
 		while (j + 1 < data->map.count_x)
 		{
-			dda_alg(data, x, y - (data->map.mapint[i][j] * SPACE / 8), x + SPACE, (y + SPACE / 2) - (data->map.mapint[i][j + 1] * SPACE / 8));
-			//my_mlx_pixel_put(data, x, y, 0x00FF0000);
+			dda_alg(data, x, y - (data->map.mapint[i][j] * SPACE / 4), x + SPACE, (y + SPACE / 2) - (data->map.mapint[i][j + 1] * SPACE / 4));
 			x += SPACE;
 			y += SPACE / 2;
 			j++;
@@ -29,13 +28,12 @@ int put_pix(t_data *data)
 	data->map.reset = 0;
 	while (i < data->map.count_x)
 	{
-		y = WIN_HEIGTH / 4 + data->map.reset * (SPACE / 2);
-		x = WIN_WIDTH / 3 + data->map.reset * SPACE;
+		y = (WIN_HEIGTH - (data->map.count_y * SPACE)) / 2 + data->map.reset * (SPACE / 2);
+		x = (WIN_WIDTH - (data->map.count_x * SPACE)) / 2 + data->map.reset * SPACE;
 		j = 0;
-		while (j + 1< data->map.count_y)
+		while (j + 1 < data->map.count_y)
 		{
-			dda_alg(data, x, y - (data->map.mapint[j][i] * SPACE / 8), x - SPACE, (y + SPACE) - (data->map.mapint[j + 1][i] * SPACE / 8));
-			//my_mlx_pixel_put(data, x, y, 0x00FF0000);
+			dda_alg(data, x, y - (data->map.mapint[j][i] * SPACE / 4), x - SPACE, (y + SPACE) - (data->map.mapint[j + 1][i] * SPACE / 4));
 			x -= SPACE;
 			y += SPACE;
 			j++;

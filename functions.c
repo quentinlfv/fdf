@@ -2,7 +2,9 @@
 
 void	ft_putchar(char c)
 {
-	write(1, &c, 1);
+	int	i;
+
+	i = write(1, &c, 1);
 }
 
 char	*ft_substr(char const *s, unsigned int start, size_t len)

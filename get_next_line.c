@@ -78,28 +78,3 @@ char	*get_next_line(int fd)
 	get_rest(mem_line, buf);
 	return (line);
 }
-
-// int	main(void)
-// {
-// 	int	fd;
-// 	char	*line;
-
-// 	fd = open("big_line_no_nl", O_RDONLY);
-// 	if (fd == -1)
-// 	{
-// 		printf("Error while oppening doc");
-// 		return (0);
-// 	}
-// 	printf("the file descp is %d\n", fd);
-// 	for (int i = 0; i < 10; i++)
-// 	{
-// 		line = get_next_line(fd);
-// 		printf("gnl = %s\n", line);
-// 		free(line);
-// 	}
-// 	if (close(fd) < 0)
-// 		printf("Error while closing doc");
-// 	else
-// 		printf("\nclosed the doc");
-// 	return (0);
-// }

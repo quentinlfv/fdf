@@ -11,7 +11,6 @@ t_map	get_maps(char *map_file)
 	map = NULL;
 	fd = open_doc(map_file);	
 	line = get_next_line(fd);
-	// printf("%s \n", line);
 	map = ft_strjoin(map, line);
 	while (line != NULL)
 	{
@@ -22,8 +21,7 @@ t_map	get_maps(char *map_file)
 		count_y++;
 	}
 	printf("%s\n", map);
-	// if (line != NULL)
-		free(line);
+	free(line);
 	close_doc(fd);
 	return (initialize_maps(map, count_y));
 }
@@ -47,18 +45,6 @@ t_map	initialize_maps(char *f_map, int y)
 		i++;
 	}
 	i = 0;
-	// while (map.map[i])
-	// {
-	// 	j = 0;
-	// 	while (map.map[i][j])
-	// 	{
-	// 		printf("%s ", map.map[i][j]);
-	// 		j++;
-	// 	}
-	// 	printf("\n");
-	// 	i++;
-	// }
-	i = 0;
 	while (i < map.count_y)
 	{
 		free(s_map[i]);
@@ -76,7 +62,6 @@ int atoi_map(t_data *data)
 	int	x;
 
 	y = 0;
-	printf("count_y = %d | count_x = %d\n", data->map.count_y, data->map.count_x);
 	int_map = malloc(sizeof(int *) * data->map.count_y);
 	if (!int_map)
 		return (0);
@@ -93,24 +78,9 @@ int atoi_map(t_data *data)
 		x = 0;
 		while (x < data->map.count_x)
 		{
-			// printf("Y_VAL== %d\nI_VAL== %d\nATOI_RES== %d\nX_VAL== %d\n\n", y, i, ft_atoi(data->map.map[i]), x);
 			int_map[y][x] = ft_atoi(data->map.map[y][x]);
 			x++;
 		}
-		// printf("y = %d\n", y);
-		y++;
-	}
-	printf("\n\n\n");
-	y = 0;
-	while (y < data->map.count_y)
-	{
-		x = 0;
-		while (x < data->map.count_x)
-		{
-			printf("%d ", int_map[y][x]);
-			x++;
-		}
-		printf("\n");
 		y++;
 	}
 	data->map.mapint = int_map;
