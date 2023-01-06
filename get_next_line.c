@@ -69,7 +69,7 @@ char	*get_next_line(int fd)
 		ft_bzero(buf, BUFFER_SIZE + 1);
 		ret = read(fd, buf, BUFFER_SIZE);
 		if (ret < 0)
-			return free(mem_line), (NULL);
+			return (free(mem_line), (NULL));
 		mem_line = ft_strjoin_gnl(mem_line, buf);
 		if (!mem_line)
 			return (NULL);

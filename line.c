@@ -1,11 +1,24 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   line.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: qlefevre <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/01/06 14:10:10 by qlefevre          #+#    #+#             */
+/*   Updated: 2023/01/06 14:10:14 by qlefevre         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 #include "fdf.h"
 
-void	dda_alg(t_data *data, float x1, float y1, float x2, float y2)
+void	dda_alg(t_data *data, float y, float x1, float y1)
 {
-	int	i;
+	int		i;
+	float	x;
 
-	data->line.dx = x2 - x1;
-	data->line.dy = y2 - y1;
+	x = data->line.x;
+	data->line.dx = x1 - x;
+	data->line.dy = y1 - y;
 	if (abs(data->line.dx) > abs(data->line.dy))
 		data->line.step = abs(data->line.dx);
 	else
@@ -15,9 +28,9 @@ void	dda_alg(t_data *data, float x1, float y1, float x2, float y2)
 	i = 0;
 	while (i < data->line.step)
 	{	
-		my_mlx_pixel_put(data, round(x1), roundf(y1) / 2, 0x00FF0000);
-		x1 = x1 + data->line.xinc;
-		y1 = y1 + data->line.yinc;
+		my_mlx_pixel_put(data, round(x), roundf(y) / 2, 0x00FF9933);
+		x = x + data->line.xinc;
+		y = y + data->line.yinc;
 		i++;
 	}
 }

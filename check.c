@@ -1,8 +1,19 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   check.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: qlefevre <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/01/06 14:08:01 by qlefevre          #+#    #+#             */
+/*   Updated: 2023/01/06 14:16:09 by qlefevre         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 #include "fdf.h"
 
-int check_arg(char *file)
+int	check_arg(char *file)
 {
-    if (ft_strnstr(file, ".fdf", ft_strlen(file)) == NULL)
-        return (0);
-    return (1);
+	if (ft_strnstr(file, ".fdf", ft_strlen(file)) == NULL)
+		return (0);
+	return (1);
 }

@@ -1,3 +1,14 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   handle_event.c                                     :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: qlefevre <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/01/06 14:08:39 by qlefevre          #+#    #+#             */
+/*   Updated: 2023/01/06 14:08:45 by qlefevre         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 #include "fdf.h"
 
 int	handle_no_event(void *data)
@@ -18,7 +29,7 @@ int	handle_keypress(int key, t_data *data)
 	return (0);
 }
 
-int samibg(t_data *data)
+int	handle_cross(t_data *data)
 {
 	mlx_loop_end(data->mlx_ptr);
 	if (data->win_ptr)

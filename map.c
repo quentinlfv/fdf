@@ -1,15 +1,26 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   map.c                                              :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: qlefevre <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/01/06 14:09:12 by qlefevre          #+#    #+#             */
+/*   Updated: 2023/01/06 14:09:17 by qlefevre         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 #include "fdf.h"
 
 t_map	get_maps(char *map_file)
 {
-	char *map;
-	char *line;
-	int count_y;
-	int	fd;
+	char	*map;
+	char	*line;
+	int		count_y;
+	int		fd;
 
 	count_y = 0;
 	map = NULL;
-	fd = open_doc(map_file);	
+	fd = open_doc(map_file);
 	line = get_next_line(fd);
 	map = ft_strjoin(map, line);
 	while (line != NULL)
@@ -29,13 +40,11 @@ t_map	get_maps(char *map_file)
 t_map	initialize_maps(char *f_map, int y)
 {
 	t_map	map;
-	char **s_map;
-	int	i;
-	int j = 0;
+	char	**s_map;
+	int		i;
 
 	map.count_y = y;
 	map.count_x = count_x(f_map);
-	printf("count x = %d\n", map.count_x);
 	map.map = malloc(sizeof(char **) * map.count_y);
 	s_map = ft_split(f_map, '\n');
 	i = 0;
@@ -55,7 +64,7 @@ t_map	initialize_maps(char *f_map, int y)
 	return (map);
 }
 
-int atoi_map(t_data *data)
+int	malloc_map(t_data *data)
 {
 	int	**int_map;
 	int	y;
@@ -72,6 +81,12 @@ int atoi_map(t_data *data)
 			return (0);
 		y++;
 	}
+	atoi_map(data, int_map, y, x);
+	return (1);
+}
+
+void	atoi_map(t_data *data, int **int_map, int y, int x)
+{
 	y = 0;
 	while (y < data->map.count_y)
 	{
@@ -84,6 +99,5 @@ int atoi_map(t_data *data)
 		y++;
 	}
 	data->map.mapint = int_map;
-	map_limit(data);
-	return (1);
+	map_limit(data, 0, 0);
 }
