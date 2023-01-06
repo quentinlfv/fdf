@@ -29,7 +29,6 @@ int	open_doc(char *doc)
 	fd = open(doc, O_RDONLY);
 	if (fd == -1)
 	{
-		ft_putchar("Error while oppening doc");
 		return (0);
 	}
 	return (fd);
@@ -39,11 +38,8 @@ int	close_doc(int fd)
 {
 	if (close(fd) < 0)
 	{
-		ft_putchar("Error while closing doc");
 		return (0);
 	}
-	else
-		ft_putchar("closed the doc\n");
 	return (1);
 }
 

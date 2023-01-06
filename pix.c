@@ -20,7 +20,6 @@ void	put_pix(t_data *data)
 	pix_x(data, y, i, j);
 	pix_y(data, y, i, j);
 	mlx_put_image_to_window(data->mlx_ptr, data->win_ptr, data->img, 0, 0);
-	return (0);
 }
 
 void	pix_x(t_data *data, int y, int i, int j)
