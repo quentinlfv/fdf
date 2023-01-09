@@ -43,7 +43,6 @@ typedef struct s_map
 {
 	char	***map;
 	int		reset;
-	int		zoom;
 	int		count_y;
 	int		count_x;
 	int		**mapint;

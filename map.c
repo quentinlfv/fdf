@@ -31,7 +31,6 @@ t_map	get_maps(char *map_file)
 			map = ft_strjoin(map, line);
 		count_y++;
 	}
-	printf("%s\n", map);
 	free(line);
 	close_doc(fd);
 	return (initialize_maps(map, count_y));
